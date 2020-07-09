@@ -1,1 +1,1 @@
-MinecraftDiscordBot
+Minecraft Discord Bot
