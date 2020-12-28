@@ -1,59 +1,52 @@
-// Requirements 
+// Dependencies
 const Discord = require('discord.js');
 const Minecraft = require("minecraft-server-util");
+const PublicIp = require('public-ip');
+const config = require("./config.json")
 
 // Bot Login
-const bot  = new Discord.Client();
-bot.login('Insert your bot token here!');
-
-// Command Prefix
-const PREFIX = '!';
-
-var ip = "Your Ip here!";
-var port = 25565;
-var refreshTime = 30;
+const Bot  = new Discord.Client();
+Bot.login(config.token);
 
 function GetServerStatus()
 {
     let serverStatus;
 
-    Minecraft(ip, port, (error, response) => 
+    Minecraft(config.ip, config.port, (error, response) => 
     {
        if(error)
        {
            serverStatus = "Server Offline";
-           bot.user.setActivity(serverStatus, {type: "PLAYING"});
+           Bot.user.setActivity(serverStatus, {type: "PLAYING"});
            throw error;
        } 
        
        serverStatus = response.onlinePlayers + " of " + response.maxPlayers;
-       bot.user.setActivity(serverStatus, {type: "PLAYING"});
+       Bot.user.setActivity(serverStatus, {type: "PLAYING"});
        
     })
 }
 
-bot.on('ready', () => 
+async function GetIp()
+{
+    return await PublicIp.v4();
+}
+
+Bot.on('ready', () => 
 {
     console.log('Beep!');
     GetServerStatus();
-    bot.setInterval(GetServerStatus, refreshTime * 1000);
+    Bot.setInterval(GetServerStatus, config.intervalTime * 1000);
 });
 
-bot.on('message', message=>
+Bot.on('message', message =>
 {
-   
-    let args = message.content.substring(PREFIX.length).split(" ");
+    let args = message.content.substring(config.prefix.length).split(" ");
 
     switch(args[0])
     {
         case 'ip': 
-        {
-            if(!ip)
-                message.reply('There is no current IP!');
-            else
-                message.reply(ip);
-            
-        }
+            GetIp().then(ip => message.reply(ip));
+            break;
     }
-})
-
+});
