@@ -3,6 +3,8 @@ const Discord = require('discord.js');
 const Minecraft = require("minecraft-server-util");
 const PublicIp = require('public-ip');
 const config = require("./config.json")
+const Fs = require('fs-extra')
+const Git = require('simple-git');
 
 // Bot Login
 const Bot  = new Discord.Client();
@@ -35,6 +37,7 @@ async function GetIp()
 Bot.on('ready', () => 
 {
     console.log('Beep!');
+    CheckVersion();
     GetServerStatus();
     Bot.setInterval(GetServerStatus, config.intervalTime * 1000);
 });
@@ -50,3 +53,12 @@ Bot.on('message', message =>
             break;
     }
 });
+
+function CheckVersion()
+{
+    Fs.readJson('./package.json', (err, packageObj) => 
+    {
+        if (err) console.error(err)
+        console.log(packageObj.version)
+    })
+}
