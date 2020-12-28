@@ -6,7 +6,6 @@ const config = require("./config.json")
 
 // Bot Login
 const Bot  = new Discord.Client();
-
 Bot.login(config.token);
 
 function GetServerStatus()
