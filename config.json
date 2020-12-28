@@ -1,7 +1,0 @@
-{
-    "token": "Your bot token here",
-    "prefix": "!",
-    "ip" : "",
-    "port": 25565,
-    "intervalTime" : 30
-}

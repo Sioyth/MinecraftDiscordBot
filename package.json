@@ -10,6 +10,6 @@
   "license": "ISC",
   "dependencies": {
     "discord.js": "^12.1.1",
-    "minecraft-server-util": "^1.1.0"
+    "minecraft-server-util": "^3.4.2"
   }
 }
