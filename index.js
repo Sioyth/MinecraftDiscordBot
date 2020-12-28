@@ -8,6 +8,8 @@ const config = require("./config.json")
 const Bot  = new Discord.Client();
 Bot.login(config.token);
 
+// todo create config file automaticly
+
 function GetServerStatus()
 {
     var serverStatus;
