@@ -3,30 +3,30 @@ const Discord = require('discord.js');
 const Minecraft = require("minecraft-server-util");
 const PublicIp = require('public-ip');
 const config = require("./config.json")
-const Fs = require('fs-extra')
-const Git = require('simple-git');
+
+require("dotenv").config();
 
 // Bot Login
 const Bot  = new Discord.Client();
-Bot.login(config.token);
+
+Bot.login(process.env.DISCORDTOKEN);
 
 function GetServerStatus()
 {
-    let serverStatus;
+    var serverStatus;
 
-    Minecraft(config.ip, config.port, (error, response) => 
-    {
-       if(error)
-       {
-           serverStatus = "Server Offline";
-           Bot.user.setActivity(serverStatus, {type: "PLAYING"});
-           throw error;
-       } 
-       
-       serverStatus = response.onlinePlayers + " of " + response.maxPlayers;
-       Bot.user.setActivity(serverStatus, {type: "PLAYING"});
-       
-    })
+    Minecraft.status(config.ip, { port: config.port }) // port is default 25565
+        .then((response) => 
+        {
+            serverStatus = response.onlinePlayers + " of " + response.maxPlayers;
+            Bot.user.setActivity(serverStatus, {type: "PLAYING"});
+        })
+        .catch((error) => 
+        {
+            serverStatus = "Server Offline";
+            Bot.user.setActivity(serverStatus, {type: "PLAYING"});
+            throw error;
+        });
 }
 
 async function GetIp()
@@ -37,7 +37,6 @@ async function GetIp()
 Bot.on('ready', () => 
 {
     console.log('Beep!');
-    CheckVersion();
     GetServerStatus();
     Bot.setInterval(GetServerStatus, config.intervalTime * 1000);
 });
@@ -53,12 +52,3 @@ Bot.on('message', message =>
             break;
     }
 });
-
-function CheckVersion()
-{
-    Fs.readJson('./package.json', (err, packageObj) => 
-    {
-        if (err) console.error(err)
-        console.log(packageObj.version)
-    })
-}
