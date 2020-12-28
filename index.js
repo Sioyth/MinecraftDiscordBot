@@ -4,12 +4,9 @@ const Minecraft = require("minecraft-server-util");
 const PublicIp = require('public-ip');
 const config = require("./config.json")
 
-require("dotenv").config();
-
 // Bot Login
 const Bot  = new Discord.Client();
-
-Bot.login(process.env.DISCORDTOKEN);
+Bot.login(config.token);
 
 function GetServerStatus()
 {
