@@ -11,6 +11,6 @@
   "dependencies": {
     "discord.js": "^12.1.1",
     "minecraft-server-util": "^3.4.2",
-    "public-ip": "^4.0.3"
+    "public-ip": "^6.0.1"
   }
 }
